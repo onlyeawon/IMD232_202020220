@@ -22,19 +22,19 @@ function draw() {
 
   // 큰액자
   fill('#382b2b');
-  rect(width / 3.2, height / 3.777, width / 4.173, height / 2.72);
+  rect(width / 3.4288, height / 3.777, width / 4.173, height / 2.72);
   fill('#fffff');
-  rect(300, 180, 215, 235);
+  rect(280, 180, 215, 235);
   fill('#b29b7f');
-  rect(300, 180, 160, 175);
+  rect(280, 180, 160, 175);
   fill('#ffca82');
-  rect(300, 180, 155, 170);
+  rect(280, 180, 155, 170);
   fill('#ff9343');
-  ellipse(320, 200, 85, 85);
+  ellipse(300, 200, 85, 85);
   fill('#ff9343');
-  ellipse(260, 130, 50, 50);
+  ellipse(240, 130, 50, 50);
   fill('#ffffff88');
-  rect(280, 190, 50, 20);
+  rect(260, 190, 50, 20);
 
   // 엽서
   fill('#382b2b');
