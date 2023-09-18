@@ -110,9 +110,9 @@ function draw() {
   fill('#a89597');
   rect(500, 560, 380, 23);
   // 소파바닥
-  fill('#c0aeaf');
+  fill('#b2a3a4');
   rect(275, 517, 70, 110, 10, 10, 0, 0);
-  fill('#c0aeaf');
+  fill('#b2a3a4');
   rect(725, 517, 70, 110, 10, 10, 0, 0);
   fill('#ffffff66');
   rect(275, 567, 70, 10);
