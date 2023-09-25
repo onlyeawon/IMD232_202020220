@@ -28,7 +28,6 @@ function setup() {
 
 function draw() {
   background('white');
-  //   acc = p5.Vector.random2D();
   acc.mult(0.4);
   vel.add(acc);
   vel.limit(4);
@@ -48,6 +47,7 @@ function draw() {
   if (mouseIsPressed === true) {
     centerAddMouse = p5.Vector.add(mouse, center);
     acc.set(centerAddMouse.x, centerAddMouse.y);
+    acc = p5.Vector.random2D();
   } else {
     // rect(25, 25, 50, 50);
   }
