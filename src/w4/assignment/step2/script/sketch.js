@@ -2,6 +2,10 @@ let moverA;
 let gravity;
 let isDragging = false;
 let dragOffset;
+let mVec;
+let pMVec;
+let lastMousePos;
+let mouseSpeed;
 
 function setup() {
   setCanvasContainer('canvas', 1, 1, true);
@@ -9,39 +13,46 @@ function setup() {
   moverA = new Mover(width / 2, height / 2, 10);
   gravity = createVector(0, 0.3);
   dragOffset = createVector(0, 0);
+  mVec = createVector(mouseX, mouseY);
+  pMVec = createVector(mouseX, mouseY);
+  lastMousePos = createVector(mouseX, mouseY);
+  mouseSpeed = createVector();
 }
 
 function draw() {
   background(255);
 
+  mVec.set(mouseX, mouseY);
+
   if (isDragging) {
-    // If the ball is being dragged, update its position to the mouse position.
-    moverA.pos.x = mouseX + dragOffset.x;
-    moverA.pos.y = mouseY + dragOffset.y;
+    // 마우스 드래그 중일 때, 마우스의 방향을 사용하여 물체의 속도 조절
+    let mouseDirection = p5.Vector.sub(mVec, pMVec);
+    mouseDirection.mult(0.1); // 조절할 속도 스케일 조절
+    moverA.vel.add(mouseDirection);
+
+    moverA.pos.set(mouseX - dragOffset.x, mouseY - dragOffset.y);
+    moverA.acc.set(0, 0);
   } else {
-    // Apply gravity only if not dragging the ball.
     let gravityA = createVector(gravity.x, gravity.y);
     gravityA.mult(moverA.mass);
     moverA.applyForce(gravityA);
+
+    moverA.update();
+    moverA.checkEdges();
   }
 
-  moverA.update();
-  moverA.checkEdges();
   moverA.display();
-  moverA.displayVectors();
+
+  pMVec.set(mVec.x, mVec.y);
 }
 
 function mousePressed() {
-  // Check if the mouse is over the ball.
   let d = dist(mouseX, mouseY, moverA.pos.x, moverA.pos.y);
   if (d < moverA.radius) {
     isDragging = true;
-    // Calculate the offset from the ball's center to the mouse.
-    dragOffset.x = moverA.pos.x - mouseX;
-    dragOffset.y = moverA.pos.y - mouseY;
-    // Stop the ball's motion while dragging.
-    moverA.vel.mult(0);
-    moverA.acc.mult(0);
+    dragOffset.set(mouseX - moverA.pos.x, mouseY - moverA.pos.y);
+    moverA.vel.set(0, 0);
+    moverA.acc.set(0, 0);
   }
 }
 
