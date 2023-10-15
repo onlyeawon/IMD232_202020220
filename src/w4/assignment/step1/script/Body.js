@@ -1,10 +1,3 @@
-// Original Code from: https://editor.p5js.org/natureofcode/sketches/uT9VpVvCO
-// Daniel Shiffman
-// The Nature of Code
-// Example 2-9: N-Bodies Attraction
-
-//Modified by OO-SUNG SON (spctrm404)
-
 class Body {
   constructor(x, y) {
     this.position = createVector(x, y);
@@ -18,7 +11,7 @@ class Body {
 
   attract(body) {
     let force = p5.Vector.sub(this.position, body.position);
-    let distance = constrain(force.mag(), 100, 70);
+    let distance = constrain(force.mag(), 80, 100);
     let strength = (G * (this.mass * body.mass)) / distance ** 2;
     force.setMag(strength);
     return force;
@@ -45,7 +38,7 @@ class Body {
   display() {
     noStroke(0);
     strokeWeight(2);
-    fill(127, 127);
+    fill(20, 100);
     circle(this.position.x, this.position.y, this.radius * 2);
   }
 

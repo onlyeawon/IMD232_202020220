@@ -1,7 +1,7 @@
 let bodies = [];
 let numBodies = 50;
 
-let G = 0.3;
+let G = 0.4;
 
 let showVector = false;
 
@@ -17,8 +17,8 @@ function setup() {
 function draw() {
   background(255);
 
-  for (let i = 0; i < 40; i++) {
-    for (let j = 0; j < 40; j++) {
+  for (let i = 0; i < 50; i++) {
+    for (let j = 0; j < 50; j++) {
       if (i !== j) {
         let forceForJ = bodies[i].attract(bodies[j]);
         bodies[j].applyForce(forceForJ);
@@ -39,10 +39,6 @@ function mousePressed() {
 }
 
 function reset() {
-  // for (let i = 0; i < 10; i++) {
-  //   bodies[i] = new Body(random(width), random(height), random(0.1, 1));
-  // }
-
   bodies = [];
 
   for (let i = 0; i < numBodies; i++) {
