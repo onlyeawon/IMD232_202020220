@@ -1,6 +1,6 @@
+let gravity;
 let pendulumA;
 let pendulumB;
-let gravity;
 
 function setup() {
   setCanvasContainer('canvas', 1, 1, true);

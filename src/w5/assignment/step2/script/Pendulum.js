@@ -1,10 +1,9 @@
 class Pendulum {
   constructor(x, y, length, angle, rad, connectedPendulum = null) {
-    // 위치, 길이, 초기 각도, 반지름, 연결하기
     this.angle = angle; // 진자의 각도
-    this.angleVel = 0; // 진자의 각도에 대한 속도
-    this.angleAcc = 0; // 진자의 각도에 대한 가속도
-    this.pos = createVector(x, y); // 진자의 위치
+    this.angleVel = 0;
+    this.angleAcc = 0;
+    this.pos = createVector(x, y);
     this.length = length; // 진자의 길이
     this.ballPos = createVector(x, y);
     this.ballPos.add(
@@ -50,7 +49,7 @@ class Pendulum {
     fill(127);
     ellipse(this.pos.x, this.pos.y, 20);
     if (this.isDragging) {
-      fill('salmon');
+      fill('salmons');
     } else if (this.isHover) {
       fill(127);
     } else {
