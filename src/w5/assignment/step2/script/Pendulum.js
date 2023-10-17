@@ -49,7 +49,7 @@ class Pendulum {
     fill(127);
     ellipse(this.pos.x, this.pos.y, 20);
     if (this.isDragging) {
-      fill('salmons');
+      fill('salmon');
     } else if (this.isHover) {
       fill(127);
     } else {
