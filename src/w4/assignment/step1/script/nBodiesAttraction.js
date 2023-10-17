@@ -42,7 +42,6 @@ function reset() {
   bodies = [];
 
   for (let i = 0; i < numBodies; i++) {
-    // 새로운 Body 객체를 생성하고 배열에 추가
     let body = new Body(random(width), random(height));
     bodies.push(body);
   }

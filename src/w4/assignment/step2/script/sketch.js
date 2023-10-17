@@ -25,7 +25,6 @@ function draw() {
   mVec.set(mouseX, mouseY);
 
   if (isDragging) {
-    // 마우스 드래그 중일 때, 마우스의 방향을 사용하여 물체의 속도 조절
     let mouseDirection = p5.Vector.sub(mVec, pMVec);
     mouseDirection.mult(0.04); // 조절할 속도 스케일 조절
     moverA.vel.add(mouseDirection);
@@ -33,7 +32,7 @@ function draw() {
     moverA.pos.set(mouseX - dragOffset.x, mouseY - dragOffset.y);
     moverA.acc.set(0, 0);
   } else {
-    let frictionCoefficient = 0.08; // 마찰 계수
+    let frictionCoefficient = 0.08; // 마찰계수
     let friction = p5.Vector.mult(moverA.vel, -1)
       .normalize()
       .mult(frictionCoefficient);
