@@ -1,31 +1,53 @@
-let pend;
+let pendulumA;
+let pendulumB;
 let gravity;
 
 function setup() {
   setCanvasContainer('canvas', 1, 1, true);
-  background(255);
 
-  pend = new Pendulum(width / 2, 10, height / 2, (TAU / 360) * 30, 50);
-  gravity = createVector(0, 1);
+  pendulumA = new Pendulum(width / 2, 10, height / 3, (TAU / 360) * 45, 25);
+  pendulumB = new Pendulum(
+    width / 2,
+    10,
+    height / 3,
+    (TAU / 360) * 30,
+    25,
+    pendulumA
+  );
+  gravity = createVector(0, 0.5);
+
+  background(255);
 }
 
 function draw() {
-  pend.applyForce(gravity);
-  pend.update();
-
   background(255);
-  pend.display();
+  pendulumA.applyGravity(gravity);
+  pendulumA.update();
+  pendulumA.display();
+
+  push();
+  pendulumB.applyGravity(gravity);
+  pendulumB.update();
+  pendulumB.display();
+  pop();
 }
 
 function mouseMoved() {
-  pend.mouseMoved(mouseX, mouseY);
+  pendulumA.mouseMoved(mouseX, mouseY);
+  pendulumB.mouseMoved(mouseX, mouseY);
 }
+
 function mousePressed() {
-  pend.mousePressed(mouseX, mouseY);
+  pendulumA.mousePressed(mouseX, mouseY);
+  pendulumB.mousePressed(mouseX, mouseY);
 }
+
 function mouseDragged() {
-  pend.mouseDragged(mouseX, mouseY);
+  pendulumA.mouseDragged(mouseX, mouseY);
+  pendulumB.mouseDragged(mouseX, mouseY);
 }
+
 function mouseReleased() {
-  pend.mouseReleased();
+  pendulumA.mouseReleased();
+  pendulumB.mouseReleased();
 }
