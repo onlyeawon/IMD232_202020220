@@ -17,7 +17,7 @@ class Pendulum {
 
     this.connectedPendulum = connectedPendulum;
     if (connectedPendulum) {
-      this.pos.x = connectedPendulum.ballPos.x; // PendulumA의 끝 위치로 설정
+      this.pos.x = connectedPendulum.ballPos.x;
       this.pos.y = connectedPendulum.ballPos.y; // PendulumA의 끝 위치로 설정
     }
   }
