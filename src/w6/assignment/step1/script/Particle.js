@@ -4,14 +4,14 @@ class Particle {
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.rad = 8;
-    this.lifeSpan = 600;
+    this.lifeSpan = 780;
     this.angleSpeed = random(-0.3, 0.3);
     this.angle = 0;
-    this.color = color(random(360), 100, 100, 100); // 랜덤 HSL 색상
+    this.color = color(random(360), 100, 100, 100);
   }
 
   applyForce(gravity) {
-    this.acc.add(gravity); // 힘을 누적
+    this.acc.add(gravity);
   }
 
   update() {

@@ -8,7 +8,7 @@ function setup() {
   particle = new Particle(width / 2, 0);
   gravity = createVector(0, 0.02);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 110; i++) {
     emitters.push(new Emitter(random(width), random(height), 1)); // 1은 각 에미터당 생성할 입자 수
   }
 
