@@ -1,16 +1,18 @@
 class Emitter {
-  constructor(x, y) {
+  constructor(x, y, numParticles) {
+    this.x = x;
+    this.y = y;
+    this.numParticles = numParticles;
     this.particles = [];
-    this.pos = createVector(x, y);
+
+    for (let i = 0; i < this.numParticles; i++) {
+      this.particles.push(new Particle(this.x, this.y));
+    }
   }
 
-  addParticle() {
-    this.particles.push(new Particle(this.pos.x, this.pos.y));
-  }
-
-  update(gravity) {
+  update() {
     for (let i = this.particles.length - 1; i >= 0; i--) {
-      this.particles[i].applyForce(gravity);
+      this.particles[i].applyForce(createVector(0, 0.01)); // 중력 적용
       this.particles[i].update();
       if (this.particles[i].isDead()) {
         this.particles.splice(i, 1);

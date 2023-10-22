@@ -1,33 +1,34 @@
-let emitter;
+let particle;
+let gravity;
 let emitters = [];
-let gravity = 0;
 
 function setup() {
   setCanvasContainer('mysketch', 3, 2, true);
 
-  emitter = new Emitter(width / 2, 0);
+  particle = new Particle(width / 2, 0);
+  gravity = createVector(0, 0.02);
 
-  gravity = createVector(0, 0.01);
+  for (let i = 0; i < 100; i++) {
+    emitters.push(new Emitter(random(width), random(height), 1)); // 1은 각 에미터당 생성할 입자 수
+  }
 
+  colorMode(HSL, 360, 100, 100, 100);
   background(255);
 }
 
 function draw() {
-  emitter.addParticle();
-  for (let i = 0; i < emitters.length; i++) {
-    emitters[i].addParticle();
+  // console.log(particle.isDead());
+  if (particle.isDead()) {
+    particle = new particle(width / 2, 0);
   }
 
+  particle.applyForce(gravity);
+  particle.update();
   background(255);
-  emitter.update(gravity);
-  emitter.display();
+  particle.display();
+
   for (let i = 0; i < emitters.length; i++) {
-    emitters[i].update(gravity);
+    emitters[i].update();
     emitters[i].display();
   }
-  console.log(emitter.particles.length);
 }
-
-// function mousePressed() {
-//   emitters.push(new Emitter(mouseX, mouseY));
-// }

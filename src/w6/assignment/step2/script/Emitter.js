@@ -1,35 +1,36 @@
 class Emitter {
-  constructor(x, y, numParticles) {
-    this.x = x;
-    this.y = y;
-    this.numParticles = numParticles;
+  constructor(x, y) {
     this.particles = [];
-    this.lifeSpan = 600;
+    this.gravity = gravity; // 중력 적용
+    this.position = createVector(x, y);
+  }
 
-    for (let i = 0; i < this.numParticles; i++) {
-      this.particles.push(new Particle(this.x, this.y));
+  emit(x, y, numParticles) {
+    for (let i = 0; i < numParticles; i++) {
+      for (let j = 0; j < 360; j += 10) {
+        let angle = radians(j); // 각도를 라디안으로 변환
+        let vx = cos(angle) * 5; // 원 주위로 움직이는 속도
+        let vy = sin(angle) * 5;
+        let color = [random(255), random(255), random(255)]; // 랜덤한 고정 색상 생성
+        let p = new Particle(x, y, vx, vy);
+        this.particles.push(p);
+      }
     }
   }
 
   update() {
     for (let i = this.particles.length - 1; i >= 0; i--) {
-      this.particles[i].applyForce(createVector(0, 0.01)); // 중력 적용
-      this.particles[i].update();
-      if (this.particles[i].isDead()) {
+      let p = this.particles[i];
+      p.update();
+      if (p.isDead()) {
         this.particles.splice(i, 1);
       }
     }
-
-    this.lifeSpan -= 100;
   }
 
   display() {
-    for (let i = 0; i < this.particles.length; i++) {
-      this.particles[i].display();
+    for (let p of this.particles) {
+      p.display();
     }
-  }
-
-  isDead() {
-    return this.lifeSpan < 0;
   }
 }
