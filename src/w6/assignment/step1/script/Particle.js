@@ -2,7 +2,7 @@ class Particle {
   constructor(x, y) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 2);
-    this.length = 12;
+    this.length = 18;
     this.angle = 0;
     this.color = color(random(360), 100, 100, 100);
   }
