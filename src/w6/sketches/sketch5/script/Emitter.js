@@ -1,26 +1,30 @@
 class Emitter {
   constructor(x, y) {
+    this.origin = createVector(x, y);
     this.particles = [];
-    this.pos = createVector(x, y);
   }
 
   addParticle() {
-    this.particles.push(new Particle(this.pos.x, this.pos.y));
+    this.particles.push(new Particle(this.origin.x, this.origin.y));
   }
 
-  update(gravity) {
-    for (let i = this.particles.length - 1; i >= 0; i--) {
-      this.particles[i].applyForce(gravity);
-      this.particles[i].update();
-      if (this.particles[i].isDead()) {
-        this.particles.splice(i, 1);
-      }
-    }
+  applyForce(force) {
+    this.particles.forEach((eachParticle) => {
+      eachParticle.applyForce(force);
+    });
   }
 
-  display() {
-    for (let i = 0; i < this.particles.length; i++) {
-      this.particles[i].display();
-    }
+  run() {
+    // for (let i = this.particles.length - 1; i >= 0; i--) {
+    //   this.particles[i].run();
+    //   if (this.particles[i].isDead()) {
+    //     this.particles.splice(i, 1);
+    //   }
+    // }
+
+    this.particles = this.particles.filter((particle) => !particle.isDead());
+    this.particles.forEach((eachParticle) => {
+      eachParticle.run();
+    });
   }
 }
