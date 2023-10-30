@@ -1,31 +1,19 @@
-// let vehicle;
 let traffic;
-// let mVec;
-let debug = true;
+let infiniteOffset = 80;
 
 function setup() {
-  setCanvasContainer('mysketch', 2, 1, true);
-
+  setCanvasContainer('canvas', 3, 2, true);
   colorMode(HSL, 360, 100, 100, 100);
-
+  background('white');
   traffic = new Traffic();
-
-  for (let n = 0; n < 20; n++) {
+  for (let n = 0; n < 10; n++) {
     traffic.addVehicle(random(width), random(height));
   }
-
-  // vehicle = new Vehicle(width / 2, height / 2, 16, 5, 0.1, color(330, 100, 50));
-  // mVec = createVector();
-  background(0, 100, 100);
 }
 
 function draw() {
-  background(255);
+  background('white');
   traffic.run();
-  // mVec.set(mouseX, mouseY);
-  // vehicle.seek(mVec);
-  // vehicle.update();
-  // vehicle.display();
 }
 
 function mouseDragged() {
