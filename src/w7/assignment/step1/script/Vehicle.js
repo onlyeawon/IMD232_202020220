@@ -153,18 +153,27 @@ class Vehicle {
     // steer 벡터 반환
   }
 
+  // 힘을 적용하는 메서드
   applyForce(force) {
+    // 힘을 질량으로 나눈 벡터를 계산
     const forceDivedByMass = p5.Vector.div(force, this.mass);
+    // 나뉜 힘을 가속도에 추가
     this.acc.add(forceDivedByMass);
   }
 
+  // 위치, 속도, 가속도 업데이트 메서드
   update() {
+    // 속도에 가속도를 추가
     this.vel.add(this.acc);
+    // 속도를 최대 속도로 제한
     this.vel.limit(this.speedMx);
+    // 위치를 현재 속도에 따라 업데이트
     this.pos.add(this.vel);
+    // 가속도를 초기화
     this.acc.mult(0);
   }
 
+  // 화면 경계 처리 메서드
   borderInfinite() {
     if (this.pos.x < -infiniteOffset) {
       this.pos.x = width + infiniteOffset;
@@ -178,47 +187,69 @@ class Vehicle {
     }
   }
 
+  // 차량을 그리는 메서드
   display() {
     push();
+    // 차량의 위치로 이동
     translate(this.pos.x, this.pos.y);
+    // 차량의 방향을 속도의 방향으로 회전
     rotate(this.vel.heading());
+    // 테두리 없음, 색상 설정
     noStroke();
     fill(this.color);
+    // 다각형 그리기 시작
     beginShape();
+    // 정점 추가
     vertex(this.rad, 0);
     vertex(this.rad * cos(radians(-135)), this.rad * sin(radians(-135)));
     vertex(0, 0);
     vertex(this.rad * cos(radians(135)), this.rad * sin(radians(135)));
+    // 다각형 그리기 종료
     endShape(CLOSE);
     pop();
   }
 }
 
+// Traffic 클래스 정의
 class Traffic {
   constructor() {
+    // 차량 배열 초기화
     this.vehicles = [];
   }
 
+  // 시뮬레이션 실행 메서드
   run() {
+    // 차량 배열을 반복
     this.vehicles.forEach((eachVehicle) => {
+      // 분리 동작을 계산하고 힘에 적용
       const separate = eachVehicle.separate(this.vehicles);
       separate.mult(1);
       eachVehicle.applyForce(separate);
+
+      // 정렬 동작을 계산하고 힘에 적용
       const align = eachVehicle.align(this.vehicles);
       align.mult(0.5);
       eachVehicle.applyForce(align);
+
+      // 응집 동작을 계산하고 힘에 적용
       const cohesion = eachVehicle.cohesion(this.vehicles);
       cohesion.mult(0.5);
       eachVehicle.applyForce(cohesion);
+
+      // 차량 업데이트
       eachVehicle.update();
+      // 화면 경계 처리
       eachVehicle.borderInfinite();
+      // 차량 표시
       eachVehicle.display();
     });
   }
 
+  // 새로운 차량 추가 메서드
   addVehicle(x, y) {
-    // const mass = floor(random(1, 3));
+    // 질량, 반지름, 최대 속도, 최대 힘 및 색상 설정
     const mass = 0.7;
+    // 새 차량을 배열에 추가
     this.vehicles.push(
       new Vehicle(x, y, mass, mass * 12, 5, 0.1, color(random(360), 100, 40))
     );
