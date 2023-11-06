@@ -8,6 +8,7 @@ function setup() {
   // 컬러모드를 hsl로 변경 / 색상, 채도,밝기,투명도
   background('white');
   // 배경색상 설정
+
   traffic = new Traffic();
   for (let n = 0; n < 10; n++) {
     traffic.addVehicle(random(width), random(height));
@@ -28,7 +29,6 @@ function draw() {
 
 function mouseDragged() {
   traffic.addVehicle(mouseX, mouseY);
-
   // 마우스가 드래그 될 때 호출되는 mouseDragged 함수
   // 마우스를 드래그 할 때 새로운 개체가 마우스 위치에서 생성되도록 한다.
 }

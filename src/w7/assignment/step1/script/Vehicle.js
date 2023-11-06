@@ -55,6 +55,7 @@ class Vehicle {
         }
       }
     });
+
     if (cnt > 0) {
       // 이웃 비이클 개체가 하나 이상이면 수행
       steer.div(cnt);
@@ -153,105 +154,115 @@ class Vehicle {
     // steer 벡터 반환
   }
 
-  // 힘을 적용하는 메서드
   applyForce(force) {
-    // 힘을 질량으로 나눈 벡터를 계산
+    // 힘을 적용하는 메서드
     const forceDivedByMass = p5.Vector.div(force, this.mass);
-    // 나뉜 힘을 가속도에 추가
+    // 힘을 질량으로 나눈 벡터를 계산
     this.acc.add(forceDivedByMass);
+    // 나누어진 힘을 가속도에 추가
   }
 
-  // 위치, 속도, 가속도 업데이트 메서드
   update() {
-    // 속도에 가속도를 추가
+    // 위치, 속도, 가속도 업데이트 메서드
     this.vel.add(this.acc);
-    // 속도를 최대 속도로 제한
+    // 속도에 가속도를 추가
     this.vel.limit(this.speedMx);
-    // 위치를 현재 속도에 따라 업데이트
+    // 속도를 최대 속도로 제한
     this.pos.add(this.vel);
-    // 가속도를 초기화
+    // 위치를 현재 속도에 따라 업데이트 / 위치 더하기 속도
     this.acc.mult(0);
+    // 가속도를 초기화
   }
 
-  // 화면 경계 처리 메서드
   borderInfinite() {
+    // 화면 경계 처리 메서드
     if (this.pos.x < -infiniteOffset) {
       this.pos.x = width + infiniteOffset;
     } else if (this.pos.x > width + infiniteOffset) {
       this.pos.x = -infiniteOffset;
     }
+
+    // 만약 비이클의 x좌표가 화면 왼쪽 경계보다 작을 경우
+    // 비이클을 오른쪽 경계로 이동시킨다
+
     if (this.pos.y < -infiniteOffset) {
       this.pos.y = height + infiniteOffset;
     } else if (this.pos.y > height + infiniteOffset) {
       this.pos.y = -infiniteOffset;
     }
+
+    // 위쪽과 아래쪽 경계 넘어갈 때 처리
   }
 
-  // 차량을 그리는 메서드
   display() {
+    // 비이클을 그리는 메서드
     push();
-    // 차량의 위치로 이동
     translate(this.pos.x, this.pos.y);
-    // 차량의 방향을 속도의 방향으로 회전
+    // 현재 위치로 이동
     rotate(this.vel.heading());
-    // 테두리 없음, 색상 설정
+    // 비이클의 방향을 현재 속도의 방향으로 회전
     noStroke();
+    // 선 없이
     fill(this.color);
-    // 다각형 그리기 시작
+    // this.color 색상
     beginShape();
-    // 정점 추가
     vertex(this.rad, 0);
     vertex(this.rad * cos(radians(-135)), this.rad * sin(radians(-135)));
     vertex(0, 0);
     vertex(this.rad * cos(radians(135)), this.rad * sin(radians(135)));
-    // 다각형 그리기 종료
     endShape(CLOSE);
+
+    // 다각형 그리기/vertex로 다양한 꼭지점을 추가한다
     pop();
   }
 }
 
-// Traffic 클래스 정의
 class Traffic {
   constructor() {
-    // 차량 배열 초기화
+    // 비이클 배열 초기화
     this.vehicles = [];
   }
 
-  // 시뮬레이션 실행 메서드
   run() {
-    // 차량 배열을 반복
     this.vehicles.forEach((eachVehicle) => {
-      // 분리 동작을 계산하고 힘에 적용
+      // 비이클 내의 반복문 실행
       const separate = eachVehicle.separate(this.vehicles);
       separate.mult(1);
       eachVehicle.applyForce(separate);
+      // 분리 동작을 계산한다, eachVehicle이 다른 개체로부터 일정 거리 이상 멀어지도록 하는 동작
+      // 분리동작의 세기는 1로 지정
 
-      // 정렬 동작을 계산하고 힘에 적용
       const align = eachVehicle.align(this.vehicles);
       align.mult(0.5);
       eachVehicle.applyForce(align);
+      // 이웃 개체간의 일치 동작 계산
+      // 비이클이 이웃 개체와 비슷한 속도를 가지도록 함
 
-      // 응집 동작을 계산하고 힘에 적용
       const cohesion = eachVehicle.cohesion(this.vehicles);
       cohesion.mult(0.5);
       eachVehicle.applyForce(cohesion);
+      // 응집 동작 계산
+      // 비이클이 이웃 개체들의 평균 위치 쪽으로 이동하게 함
 
-      // 차량 업데이트
+      // applyForce로 힘을 적용한다
+
       eachVehicle.update();
-      // 화면 경계 처리
+      // 속도 및 가속도 부여, 업데이트
       eachVehicle.borderInfinite();
-      // 차량 표시
+      // 화면 경계 넘어갈 때의 동작처리
       eachVehicle.display();
+      // 화면에 그리기
     });
   }
 
-  // 새로운 차량 추가 메서드
   addVehicle(x, y) {
-    // 질량, 반지름, 최대 속도, 최대 힘 및 색상 설정
+    // 새로운 개체를 비이클에 추가
     const mass = 0.7;
-    // 새 차량을 배열에 추가
+    // 새로운 개체의 질량/고정
     this.vehicles.push(
+      // 새로운 비이클 개체 push 추가
       new Vehicle(x, y, mass, mass * 12, 5, 0.1, color(random(360), 100, 40))
+      // 좌표, 질량, 반지름은 질량값의 12배, 최대속도5, 최대힘0.1, 채도와 밝기를 100,40설정, 색상 무작위
     );
   }
 }
