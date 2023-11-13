@@ -1,43 +1,29 @@
-const {
+var {
   Engine,
   Render,
   Runner,
   Body,
   Composite,
   Composites,
-  Common,
   Constraint,
   MouseConstraint,
   Mouse,
-  Vertices,
-  Svg,
   Bodies,
 } = Matter;
 
-Common.setDecomp(decomp);
-
-// create engine
-const engine = Engine.create(),
+// 엔진 만들기
+var engine = Engine.create(),
   world = engine.world;
 
-// create runner
-const runner = Runner.create();
+var runner = Runner.create();
 
-const oWidth = 800;
-const oHeight = 600;
-
-let ropeA;
-let ropeB;
-let ropeC;
-
-let m;
-let mc;
+let ropeA, ropeB, ropeC;
 
 const A = [];
 const C = [];
 
 function setup() {
-  setCanvasContainer('canvas', oWidth, oHeight, true);
+  setCanvasContainer('canvas', 4, 3, true);
 
   for (let i = 0; i < 10; i++) {
     A[i] = random(100, 200);
@@ -45,18 +31,13 @@ function setup() {
   }
 
   // add bodies
-  group = Body.nextGroup(true);
-
-  ropeA = Composites.stack(100, 50, 8, 1, 10, 10, function (x, y) {
-    return Bodies.rectangle(x, y, 50, 20, {
-      collisionFilter: { group: group },
-    });
+  ropeA = Composites.stack(width / 4, 50, 8, 1, 10, 10, function (x, y) {
+    return Bodies.rectangle(x, y, 50, 20);
   });
 
   Composites.chain(ropeA, 0.5, 0, -0.5, 0, {
     stiffness: 0.8,
     length: 2,
-    render: { type: 'line' },
   });
 
   Composite.add(
@@ -69,16 +50,13 @@ function setup() {
     })
   );
 
-  group = Body.nextGroup(true);
-
-  ropeB = Composites.stack(350, 50, 10, 1, 10, 10, function (x, y) {
-    return Bodies.circle(x, y, 20, { collisionFilter: { group: group } });
+  ropeB = Composites.stack(width / 2, 50, 10, 1, 10, 10, function (x, y) {
+    return Bodies.circle(x, y, 20);
   });
 
   Composites.chain(ropeB, 0.5, 0, -0.5, 0, {
     stiffness: 0.8,
-    length: 2,
-    render: { type: 'line' },
+    length: 0,
   });
 
   Composite.add(
@@ -91,39 +69,38 @@ function setup() {
     })
   );
 
-  group = Body.nextGroup(true);
-
-  ropeC = Composites.stack(600, 50, 13, 1, 10, 10, function (x, y) {
-    return Bodies.rectangle(x - 20, y, 50, 20, {
-      collisionFilter: { group: group },
-      chamfer: 5,
-    });
+  ropeC = Composites.stack((width * 3) / 4, 50, 8, 1, 10, 10, function (x, y) {
+    return Bodies.rectangle(x, y, 50, 20);
   });
 
-  Composites.chain(ropeC, 0.3, 0, -0.3, 0, { stiffness: 1, length: 0 });
+  Composites.chain(ropeC, 0.5, 0, -0.5, 0, {
+    stiffness: 0.8,
+    length: 2,
+  });
 
   Composite.add(
     ropeC,
     Constraint.create({
       bodyB: ropeC.bodies[0],
-      pointB: { x: -20, y: 0 },
+      pointB: { x: -25, y: 0 },
       pointA: { x: ropeC.bodies[0].position.x, y: ropeC.bodies[0].position.y },
       stiffness: 0.5,
     })
   );
 
-  m = Mouse.create(document.querySelector('.p5Canvas'));
-  m.pixelRatio = (pixelDensity() * width) / oWidth;
-  mc = MouseConstraint.create(engine, {
-    mouse: m,
+  // add mouse control
+  let mouse = Mouse.create(document.querySelector('.p5Canvas'));
+  mouse.pixelRatio = pixelDensity();
+  let mouseConstraint = MouseConstraint.create(engine, {
+    mouse: mouse,
     constraint: {
       stiffness: 0.2,
     },
   });
 
-  background('white');
-  Composite.add(world, mc);
+  Composite.add(world, [mouseConstraint, ropeA, ropeB, ropeC]);
 
+  background('white');
   Runner.run(runner, engine);
 }
 
@@ -143,7 +120,7 @@ function draw() {
   noStroke();
 
   // ropeA에 도형 그리기
-  fill(255, 51, 0);
+  fill(255, 102, 102);
   for (let i = 0; i < ropeA.bodies.length; i++) {
     const pos = ropeA.bodies[i].position;
     const angle = ropeA.bodies[i].angle;
@@ -159,14 +136,14 @@ function draw() {
   }
 
   // ropeB에 도형 그리기
-  fill(102, 102, 255);
+  fill(102, 153, 255);
   for (let i = 0; i < ropeB.bodies.length; i++) {
     const pos = ropeB.bodies[i].position;
     circle(pos.x, pos.y, width / 25);
   }
 
   // ropeC에 도형 그리기
-  fill(0, 204, 51);
+  fill(102, 204, 153);
   for (let i = 0; i < ropeC.bodies.length; i++) {
     const pos = ropeC.bodies[i].position;
     const angle = ropeC.bodies[i].angle;
