@@ -15,19 +15,10 @@ function setup() {
     for (let col = 0; col < colNum; col++) {
       const x = w * col;
       const y = h * row;
-      const state = random() < 0.5;
-      const idx = colNum * row + col;
-      const newCell = new Cell(x, y, w, h, state, idx);
-      newCell.addFriends(cells);
-      cells.push(newCell);
+      let state = random() < 0.5;
+      cells.push(new Cell(x, y, w, h, state));
     }
   }
-
-  cells.forEach((eachCell) => {
-    newCell.addFriends(cells);
-  });
-
-  console.log(cells);
 
   background('white');
 }
